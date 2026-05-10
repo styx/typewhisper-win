@@ -118,6 +118,12 @@ public record AppSettings
     // Update channel preference (null = infer from installed version)
     public string? UpdateChannel { get; init; }
 
+    // Floating Mic Button
+    public bool FloatingMicButtonEnabled { get; init; } = false;
+    public FloatingMicButtonMode FloatingMicButtonMode { get; init; } = FloatingMicButtonMode.Toggle;
+    public FloatingMicButtonCorner FloatingMicButtonCorner { get; init; } = FloatingMicButtonCorner.BottomRight;
+    public int FloatingMicButtonSize { get; init; } = 56;
+
     public static AppSettings Default => new();
 
     public static int NormalizePreviewBubbleAutoHideMilliseconds(int milliseconds) =>
@@ -175,6 +181,20 @@ public enum IndicatorStyle
     StatusIsland,
     EdgeDock,
     CompactBadge
+}
+
+public enum FloatingMicButtonMode
+{
+    Toggle,
+    Hold
+}
+
+public enum FloatingMicButtonCorner
+{
+    TopLeft,
+    TopRight,
+    BottomLeft,
+    BottomRight
 }
 
 public enum OverlayWidget

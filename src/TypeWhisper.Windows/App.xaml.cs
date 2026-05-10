@@ -131,6 +131,9 @@ public partial class App : Application
         // Setup tray icon
         _trayIcon = _serviceProvider.GetRequiredService<TrayIconService>();
         _trayIcon.Initialize();
+
+        // Setup floating mic button (touch/tablet input without keyboard)
+        _serviceProvider.GetRequiredService<FloatingMicButtonService>().Initialize();
         _trayIcon.ShowSettingsRequested += (_, _) => ShowSettingsWindow();
         _trayIcon.ShowFileTranscriptionRequested += (_, _) => ShowSettingsWindow(SettingsRoute.FileTranscription, presentFileImporter: true);
         _trayIcon.ShowRecentTranscriptionsRequested += (_, _) =>
@@ -372,6 +375,7 @@ public partial class App : Application
         services.AddSingleton<CliInstallService>();
         services.AddSingleton<WatchFolderService>();
         services.AddSingleton<TrayIconService>();
+        services.AddSingleton<FloatingMicButtonService>();
         services.AddSingleton<UpdateService>();
         services.AddSingleton<PromptProcessingService>();
         services.AddSingleton<IWorkflowTextProcessor>(sp => sp.GetRequiredService<PromptProcessingService>());

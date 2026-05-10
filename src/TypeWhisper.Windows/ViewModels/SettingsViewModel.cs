@@ -56,6 +56,10 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty] private OverlayWidget _overlayLeftWidget = OverlayWidget.Waveform;
     [ObservableProperty] private OverlayWidget _overlayRightWidget = OverlayWidget.Timer;
     [ObservableProperty] private string? _uiLanguage;
+    [ObservableProperty] private bool _floatingMicButtonEnabled;
+    [ObservableProperty] private FloatingMicButtonMode _floatingMicButtonMode = FloatingMicButtonMode.Toggle;
+    [ObservableProperty] private FloatingMicButtonCorner _floatingMicButtonCorner = FloatingMicButtonCorner.BottomRight;
+    [ObservableProperty] private int _floatingMicButtonSize = 56;
     [ObservableProperty] private string _apiServerStatusText = "";
     [ObservableProperty] private string _apiServerErrorText = "";
     [ObservableProperty] private bool _apiServerHasError;
@@ -362,7 +366,11 @@ public partial class SettingsViewModel : ObservableObject
                     : _settings.Current.SpokenFeedbackVoiceId,
             MemoryEnabled = MemoryEnabled,
             ModelAutoUnloadSeconds = AutoUnloadMinutes * 60,
-            UiLanguage = UiLanguage
+            UiLanguage = UiLanguage,
+            FloatingMicButtonEnabled = FloatingMicButtonEnabled,
+            FloatingMicButtonMode = FloatingMicButtonMode,
+            FloatingMicButtonCorner = FloatingMicButtonCorner,
+            FloatingMicButtonSize = FloatingMicButtonSize
         };
 
         _isSavingSettings = true;
@@ -442,6 +450,10 @@ public partial class SettingsViewModel : ObservableObject
         MemoryEnabled = s.MemoryEnabled;
         AutoUnloadMinutes = s.ModelAutoUnloadSeconds / 60;
         UiLanguage = s.UiLanguage;
+        FloatingMicButtonEnabled = s.FloatingMicButtonEnabled;
+        FloatingMicButtonMode = s.FloatingMicButtonMode;
+        FloatingMicButtonCorner = s.FloatingMicButtonCorner;
+        FloatingMicButtonSize = s.FloatingMicButtonSize;
         RefreshApiExamples();
         RefreshApiServerStatus();
     }

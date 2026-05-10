@@ -669,6 +669,114 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
+            <StackPanel Style="{StaticResource SettingsSectionStyle}">
+                <TextBlock Text="{loc:Str Appearance.FloatingMicSection}" Style="{StaticResource SettingsGroupTitleStyle}"/>
+                <Border Style="{StaticResource SettingsGroupPanelStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="1"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="1"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="1"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Style="{StaticResource SettingsRowBorderStyle}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{loc:Str Appearance.FloatingMicEnable}" Style="{StaticResource SettingsRowLabelStyle}"/>
+                                <ui:ToggleSwitch Grid.Column="1"
+                                                 IsChecked="{Binding Settings.FloatingMicButtonEnabled}"
+                                                 OnContent=""
+                                                 OffContent=""/>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="1" Background="#18FFFFFF"/>
+
+                        <Border Grid.Row="2" Style="{StaticResource SettingsRowBorderStyle}"
+                                IsEnabled="{Binding Settings.FloatingMicButtonEnabled}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{loc:Str Appearance.FloatingMicMode}" Style="{StaticResource SettingsRowLabelStyle}"/>
+                                <ComboBox Grid.Column="1"
+                                          Style="{StaticResource SettingsAlignedComboBoxStyle}"
+                                          SelectedValue="{Binding Settings.FloatingMicButtonMode}"
+                                          SelectedValuePath="Tag">
+                                    <ComboBoxItem Content="{loc:Str Appearance.FloatingMicModeToggle}" Tag="{x:Static models:FloatingMicButtonMode.Toggle}"/>
+                                    <ComboBoxItem Content="{loc:Str Appearance.FloatingMicModeHold}" Tag="{x:Static models:FloatingMicButtonMode.Hold}"/>
+                                </ComboBox>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="3" Background="#18FFFFFF"/>
+
+                        <Border Grid.Row="4" Style="{StaticResource SettingsRowBorderStyle}"
+                                IsEnabled="{Binding Settings.FloatingMicButtonEnabled}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{loc:Str Appearance.FloatingMicCorner}" Style="{StaticResource SettingsRowLabelStyle}"/>
+                                <ComboBox Grid.Column="1"
+                                          Style="{StaticResource SettingsAlignedComboBoxStyle}"
+                                          SelectedValue="{Binding Settings.FloatingMicButtonCorner}"
+                                          SelectedValuePath="Tag">
+                                    <ComboBoxItem Content="{loc:Str Appearance.FloatingMicCornerTopLeft}" Tag="{x:Static models:FloatingMicButtonCorner.TopLeft}"/>
+                                    <ComboBoxItem Content="{loc:Str Appearance.FloatingMicCornerTopRight}" Tag="{x:Static models:FloatingMicButtonCorner.TopRight}"/>
+                                    <ComboBoxItem Content="{loc:Str Appearance.FloatingMicCornerBottomLeft}" Tag="{x:Static models:FloatingMicButtonCorner.BottomLeft}"/>
+                                    <ComboBoxItem Content="{loc:Str Appearance.FloatingMicCornerBottomRight}" Tag="{x:Static models:FloatingMicButtonCorner.BottomRight}"/>
+                                </ComboBox>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="5" Background="#18FFFFFF"/>
+
+                        <Border Grid.Row="6" Style="{StaticResource SettingsRowBorderStyle}"
+                                IsEnabled="{Binding Settings.FloatingMicButtonEnabled}">
+                            <Grid Margin="0,4,0,4">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{loc:Str Appearance.FloatingMicSize}"
+                                           Style="{StaticResource SettingsRowLabelStyle}"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Settings.FloatingMicButtonSize, StringFormat={}{0} px}"
+                                           Foreground="{StaticResource HintBrush}"
+                                           FontSize="12"
+                                           VerticalAlignment="Center"/>
+                                <Slider Grid.Row="1"
+                                        Grid.ColumnSpan="2"
+                                        Minimum="40"
+                                        Maximum="80"
+                                        SmallChange="4"
+                                        LargeChange="8"
+                                        TickFrequency="4"
+                                        IsSnapToTickEnabled="True"
+                                        IsMoveToPointEnabled="True"
+                                        Value="{Binding Settings.FloatingMicButtonSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Style="{StaticResource SettingsSliderStyle}"
+                                        Margin="0,12,0,0"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
