@@ -19,6 +19,7 @@ public sealed class FloatingMicButtonService : IDisposable
     private IDisposable? _transcriptionCompletedSub;
     private IDisposable? _transcriptionFailedSub;
     private bool _buttonWasDragged;
+    private bool _isStartPending;
 
     public FloatingMicButtonService(
         DictationViewModel dictation,
@@ -105,8 +106,10 @@ public sealed class FloatingMicButtonService : IDisposable
     {
         if (_settings.Current.FloatingMicButtonMode != FloatingMicButtonMode.Hold)
             return;
-        if (!_dictation.IsRecording)
-            _ = _dictation.StartRecordingAsync();
+        if (_dictation.IsRecording || _isStartPending)
+            return;
+        _window?.SetState(MicButtonState.Loading);
+        _ = StartRecordingAndHandleFailureAsync();
     }
 
     private void OnButtonUp(object? sender, EventArgs e)
@@ -123,16 +126,35 @@ public sealed class FloatingMicButtonService : IDisposable
         else if (!wasDrag)
         {
             if (_dictation.IsRecording)
+            {
                 _ = _dictation.StopRecordingAsync();
+            }
+            else if (_isStartPending)
+            {
+                // Model is still loading; nothing to stop yet — idle will be restored
+                // by StartRecordingAndHandleFailureAsync once the start completes.
+            }
             else
-                _ = _dictation.StartRecordingAsync();
+            {
+                _window?.SetState(MicButtonState.Loading);
+                _ = StartRecordingAndHandleFailureAsync();
+            }
         }
+    }
+
+    private async Task StartRecordingAndHandleFailureAsync()
+    {
+        _isStartPending = true;
+        await _dictation.StartRecordingAsync();
+        _isStartPending = false;
+
+        if (!_dictation.IsRecording)
+            Application.Current.Dispatcher.Invoke(() => _window?.SetState(MicButtonState.Idle));
     }
 
     private void OnButtonCancelled(object? sender, EventArgs e)
     {
         _buttonWasDragged = true;
-        // Hold mode: recording continues; ButtonUp fires after DragMove completes
     }
 
     public void Dispose()

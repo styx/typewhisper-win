@@ -9,7 +9,7 @@ using TypeWhisper.Core.Models;
 
 namespace TypeWhisper.Windows.Controls.FloatingMicButton;
 
-public enum MicButtonState { Idle, Recording, Done }
+public enum MicButtonState { Idle, Loading, Recording, Done }
 
 public partial class FloatingMicButtonWindow : Window
 {
@@ -75,6 +75,13 @@ public partial class FloatingMicButtonWindow : Window
                 ButtonBackground.Color = Color.FromRgb(0x2D, 0x2D, 0x42);
                 ButtonIcon.Text = "";
                 ButtonIcon.Foreground = new SolidColorBrush(Color.FromArgb(0xAA, 0xDD, 0xDD, 0xDD));
+                break;
+
+            case MicButtonState.Loading:
+                ButtonBackground.Color = Color.FromRgb(0xF7, 0x97, 0x00);
+                ButtonIcon.Text = "\uE916"; // Hourglass
+                ButtonIcon.Foreground = new SolidColorBrush(Colors.White);
+                StartPulse();
                 break;
 
             case MicButtonState.Recording:
