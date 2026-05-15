@@ -1,11 +1,11 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using TypeWhisper.Core.Models;
+using TypeWhisper.Windows.Native;
 
 namespace TypeWhisper.Windows.Controls.FloatingMicButton;
 
@@ -13,21 +13,10 @@ public enum MicButtonState { Idle, Loading, Recording, Done }
 
 public partial class FloatingMicButtonWindow : Window
 {
-    private const int GWL_EXSTYLE      = -20;
-    private const int WS_EX_NOACTIVATE = 0x08000000;
-
-    [System.Runtime.InteropServices.LibraryImport("user32.dll")]
-    private static partial int GetWindowLongW(IntPtr hWnd, int nIndex);
-
-    [System.Runtime.InteropServices.LibraryImport("user32.dll")]
-    private static partial int SetWindowLongW(IntPtr hWnd, int nIndex, int dwNewLong);
-
     protected override void OnSourceInitialized(EventArgs e)
     {
         base.OnSourceInitialized(e);
-        var hwnd    = new WindowInteropHelper(this).Handle;
-        var exStyle = GetWindowLongW(hwnd, GWL_EXSTYLE);
-        SetWindowLongW(hwnd, GWL_EXSTYLE, exStyle | WS_EX_NOACTIVATE);
+        WindowStyling.ApplyOverlayStyle(this);
     }
 
     private readonly FloatingMicButtonCorner _corner;
@@ -109,15 +98,14 @@ public partial class FloatingMicButtonWindow : Window
 
     private void PositionAtCorner()
     {
-        // SystemParameters.WorkArea reflects the primary monitor only; multi-monitor not supported
-        var workArea = SystemParameters.WorkArea;
+        var work = WindowStyling.GetMonitorWorkAreaForCursor(this);
         const double margin = 20;
         Left = _corner is FloatingMicButtonCorner.TopLeft or FloatingMicButtonCorner.BottomLeft
-            ? workArea.Left + margin
-            : workArea.Right - ActualWidth - margin;
+            ? work.Left + margin
+            : work.Right - ActualWidth - margin;
         Top = _corner is FloatingMicButtonCorner.TopLeft or FloatingMicButtonCorner.TopRight
-            ? workArea.Top + margin
-            : workArea.Bottom - ActualHeight - margin;
+            ? work.Top + margin
+            : work.Bottom - ActualHeight - margin;
     }
 
     private void OnMouseDown(object sender, MouseButtonEventArgs e)
